@@ -9,19 +9,22 @@
 
   outputs = { self, nixpkgs, flake-utils, rust-overlay, ... }:
     flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = import nixpkgs {
-        inherit system;
-        overlays = [
-          /* rust-overlay.overlay */
-          /* (final: prev: { */
-          /*   rustc = final.rust-bin.stable.latest.default; */
-          /*   cargo = final.rust-bin.stable.latest.default; */
-          /* }) */
-        ];
-      }; in
+      let
+        pkgs = builtins.trace (import (builtins.trace nixpkgs nixpkgs)) import nixpkgs {
+          inherit system;
+          overlays = [
+            rust-overlay.overlay
+            (final: prev: {
+              rustc = final.rust-bin.stable.latest.default;
+              cargo = final.rust-bin.stable.latest.default;
+            })
+          ];
+        };
+      in
       rec {
         packages.hello = pkgs.callPackage ./hello.nix { version = "1.0.0"; };
         defaultPackage = packages.hello;
+        nixosModule = import ./my_mod.nix;
         apps.hello = flake-utils.lib.mkApp { drv = packages.hello; };
         defaultApp = apps.hello;
       }
