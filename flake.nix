@@ -12,11 +12,11 @@
       let pkgs = import nixpkgs {
         inherit system;
         overlays = [
-          rust-overlay.overlay
-          (final: prev: {
-            rustc = final.rust-bin.stable.latest.default;
-            cargo = final.rust-bin.stable.latest.default;
-          })
+          /* rust-overlay.overlay */
+          /* (final: prev: { */
+          /*   rustc = final.rust-bin.stable.latest.default; */
+          /*   cargo = final.rust-bin.stable.latest.default; */
+          /* }) */
         ];
       }; in
       rec {
