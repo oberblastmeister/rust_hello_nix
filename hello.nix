@@ -5,6 +5,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cargo ];
   src = ./.;
   buildPhase = ''
+    echo 'version'
+    cargo --version
     cargo build --release
   '';
   installPhase = ''
